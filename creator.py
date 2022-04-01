@@ -31,9 +31,6 @@ def create_account(username, password):
         browser = webdriver.Firefox(firefox_profile= profile, executable_path=r'C:\Users\yonah\Downloads\geckodriver-v0.30.0-win64\geckodriver.exe')
         browser.install_addon(r'C:\Users\yonah\Downloads\buster_captcha_solver_for_humans-1.3.1-fx.xpi', temporary=True)
 
-        browser.get('https://check.torproject.org')
-        time.sleep(10)
-
         #get reddit account creation page
         browser.set_window_size(683, 744)
         browser.get('http://old.reddit.com/login')
