@@ -29,7 +29,7 @@ def create_account(username, password):
         profile.set_preference("network.proxy.socks_remote_dns", False)
         profile.update_preferences()
         browser = webdriver.Firefox(firefox_profile= profile, executable_path=r'C:\Users\yonah\Downloads\geckodriver-v0.30.0-win64\geckodriver.exe')
-        browser.install_addon(r'C:\Users\yonah\Downloads\buster_captcha_solver_for_humans-1.3.1-fx.xpi', temporary=True)
+        #browser.install_addon(r'C:\Users\yonah\Downloads\buster_captcha_solver_for_humans-1.3.1-fx.xpi', temporary=True)
 
         #get reddit account creation page
         browser.set_window_size(683, 744)
@@ -51,15 +51,16 @@ def create_account(username, password):
         WebDriverWait(browser, 120).until(EC.presence_of_element_located((By.XPATH, "//*[@id='recaptcha-anchor']")))
         browser.find_element_by_xpath("//*[@id='recaptcha-anchor']").click()
         browser.switch_to.default_content()
-        WebDriverWait(browser, 10).until(EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR,"[title='recaptcha challenge expires in two minutes']")))
-        WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "button")))
-        time.sleep(randint(5,10))
-        pyautogui.click(310,880)
-        time.sleep(randint(15,20))
-        browser.switch_to.default_content()
-        browser.find_elements(By.CSS_SELECTOR, ".c-btn.c-btn-primary.c-pull-right")[0].click()
+        #WebDriverWait(browser, 10).until(EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR,"[title='recaptcha challenge expires in two minutes']")))
+        #WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "button")))
+        #time.sleep(randint(5,10))
+        #pyautogui.click(310,880)
+        #time.sleep(randint(15,20))
+        #browser.switch_to.default_content()
+        #browser.find_elements(By.CSS_SELECTOR, ".c-btn.c-btn-primary.c-pull-right")[0].click()
 
-        WebDriverWait(browser, 15).until(EC.title_is("reddit: the front page of the internet"))
+        print("[+] Please complete the captcha, then click sign up")
+        WebDriverWait(browser, 240).until(EC.title_is("reddit: the front page of the internet"))
         browser.quit()
     except:
         os.system('cls')
