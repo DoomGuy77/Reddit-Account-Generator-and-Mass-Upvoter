@@ -8,7 +8,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from random import randint
 import time 
 import os
-import pyautogui
 
 
 
@@ -20,16 +19,15 @@ def create_account(username, password):
     try:
         print('[+] restarting tor for a new ip address...')
         os.system('taskkill /IM tor.exe /F')
-        torexe = os.popen(r'C:\Users\yonah\Desktop\Tor Browser\Browser\TorBrowser\Tor\tor.exe')
+        torexe = os.popen(r'C:\Users\ '.removesuffix(' ') + os.environ.get( "USERNAME" ) + r'\Desktop\Tor Browser\Browser\TorBrowser\Tor\tor.exe')
 
-        profile = FirefoxProfile(r'C:\Users\yonah\Desktop\Tor Browser\Browser\TorBrowser\Data\Browser\profile.default')
+        profile = FirefoxProfile(r'C:\Users\ '.removesuffix(' ') + os.environ.get( "USERNAME" ) + r'\Desktop\Tor Browser\Browser\TorBrowser\Data\Browser\profile.default')
         profile.set_preference('network.proxy.type', 1)
         profile.set_preference('network.proxy.socks', '127.0.0.1')
         profile.set_preference('network.proxy.socks_port', 9050)
         profile.set_preference("network.proxy.socks_remote_dns", False)
         profile.update_preferences()
-        browser = webdriver.Firefox(firefox_profile= profile, executable_path=r'C:\Users\yonah\Downloads\geckodriver-v0.30.0-win64\geckodriver.exe')
-        #browser.install_addon(r'C:\Users\yonah\Downloads\buster_captcha_solver_for_humans-1.3.1-fx.xpi', temporary=True)
+        browser = webdriver.Firefox(firefox_profile= profile, executable_path=r'.\geckodriver.exe')
 
         #get reddit account creation page
         browser.set_window_size(683, 744)
@@ -46,18 +44,11 @@ def create_account(username, password):
         browser.find_element_by_id('passwd2_reg').click()
         browser.find_element_by_id('passwd2_reg').send_keys(password)
 
-        #automate captcha
+        #open captcha
         WebDriverWait(browser, 120).until(EC.frame_to_be_available_and_switch_to_it((By.XPATH,"//iframe[@title='reCAPTCHA']")))
         WebDriverWait(browser, 120).until(EC.presence_of_element_located((By.XPATH, "//*[@id='recaptcha-anchor']")))
         browser.find_element_by_xpath("//*[@id='recaptcha-anchor']").click()
         browser.switch_to.default_content()
-        #WebDriverWait(browser, 10).until(EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR,"[title='recaptcha challenge expires in two minutes']")))
-        #WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "button")))
-        #time.sleep(randint(5,10))
-        #pyautogui.click(310,880)
-        #time.sleep(randint(15,20))
-        #browser.switch_to.default_content()
-        #browser.find_elements(By.CSS_SELECTOR, ".c-btn.c-btn-primary.c-pull-right")[0].click()
 
         print("[+] Please complete the captcha, then click sign up")
         WebDriverWait(browser, 240).until(EC.title_is("reddit: the front page of the internet"))
